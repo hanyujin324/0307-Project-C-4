@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <button onclick="pokemon">click</button>
+  <img id="img" alt="random">
+  <script>
+     // "접속할 때마다 랜덤으로 포켓몬스터 하나가 나타나게 만들기"
+    
+    const root = document.getElementById('root'); 
+    const img = document.getElementById('img'); //이미지 객체 가져옴
+     const xhr = new XMLHttpRequest();  // XMLHttpRequest객체 생성
+    // 랜덤함수. 뒤에 +1이 있는 이유는 0부터할 수 있으므로 +1로 최소값을 설정
+    const value = Math.floor((Math.random()*1260)) +1
+    console.log(value)
+    
+    // 포켓몬 api는 뒤에 있는 숫자에 따라 사진이 나온다
+    // const _URL = 'https://pokeapi.co/api/v2/pokemon/ditto';
+    //  const _URL = `https://pokeapi.co/api/v2/pokemon/10010`; //접근하고 하는 URL을 변수에 대입
+    const _URL = `https://pokeapi.co/api/v2/pokemon/${value}`;
+    
+    xhr.open('GET', _URL);  //open 함수(초기화)를 통해 서버에 전달값 설정. GET 메서드로 연결할 URL요청
+    xhr.send(); //서버에 전달 요청
+
+    // 이벤트함수이므로 onload가 아닌 load로 쓴다
+    // load(로드완료|로딩이 완료되면 실행된다)
+    xhr.addEventListener('load', function() {
+      // 로드의 응답상태를 보는 것
+      // load():load안에는 url,data, function이 있으며, function에는 respoense, status, xhr이 들어감
+      console.log(xhr.response); //response:요청 결과 데이터를 포함
+      // parse는 stirng(문자열)을 자바스크립트 값이나 객체로 변환해줌
+      const _PokeData = JSON.parse(xhr.response); //xhr.response 에는 요청된 값들이 들어있음(문자열 형태) ->parse 를 통해 객체로 바꿔줌.
+      
+      console.log(_PokeData); //객체를 출력
+      // sprites 여러개의 이미지를 하나로 합침. 유지보수 유리
+      img.src=_PokeData.sprites.front_default; //front_default 값엔 URL 형태로 포켓몬 이미지가 들어있는데, 그 URL을 img태그의 src값에 대입시킨다.   
+      //sprites에는 front말고 back도 있지만 정면사진이 필요하므로 front_default를 사용
+
+      /*       const h1 = document.createElement('h1');
+      h1.textContent = _PokeData.name;
+      root.appendChild(h1); */
+      
+    });
+    // 버튼을 클릭하면 랜덤으로 포켓몬 나오게 만들기
+    // 버튼 만들기
+
+    // 버튼누르면 나오게 함수 작성
+    function pokemon(){
+      
+}
+
+
+
+
+    /*     fetch사용
+    fetch('https://pokeapi.co/api/v2/pokemon/ditto') 
+    .then((response) => response.json())
+    .then((data) => console.log(data));   */
+    </script>
+</body>
+</html>
